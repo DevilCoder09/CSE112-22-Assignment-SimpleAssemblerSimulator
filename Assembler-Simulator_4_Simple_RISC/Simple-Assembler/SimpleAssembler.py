@@ -1,5 +1,3 @@
-"""Aryan Gupta - 2021314 Tony Thomas - 2021360 Harsh Bhardwaj - 2021322"""
-
 opcode={
     "add":"10000",
     "sub":"10001",
