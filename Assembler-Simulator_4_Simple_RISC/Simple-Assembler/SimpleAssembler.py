@@ -1,4 +1,5 @@
-"""Aryan Gupta-2021314 Tony Thomas -2021360 Harsh Bhardwaj-2021322"""
+"""Aryan Gupta - 2021314 Tony Thomas - 2021360 Harsh Bhardwaj - 2021322"""
+
 opcode={
     "add":"10000",
     "sub":"10001",
@@ -32,6 +33,7 @@ registers={
     "R6":"110",
     "FLAGS":"111"
 }
+
 from sys import stdout
 file_output=stdout
 
@@ -125,9 +127,16 @@ labels_lst={}
 pc=0
 for i in range(len(stmts)):
     if stmts[i][0][len(stmts[i][0])-1]==":":
-        labels_lst[stmts[i][0][:-1]]=pc
+        if len(stmts[i][0])==1:
+            file_output.write("Error, Invalid statement in line "+str(i+1))
+            exit()
+        labels_lst[stmts[i][0][:-1]]=pc #storing labels
         stmts[i].remove(stmts[i][0])
-    pc+=1
+        if len(stmts[i])==0:
+            file_output.write("Error, Empty label in line "+str(i+1))
+            exit()
+    if stmts[i][0]!="var":
+        pc+=1
 
 for x in stmts:
     if(len(x)==0):
@@ -140,7 +149,6 @@ if len(stmts)>256:
 #Typos in Instruction Name
 for i in range(len(stmts)):
     if stmts[i][0] not in opcode.keys() and stmts[i][0]!="var":
-        print(stmts[i][0])
         file_output.write("Error, Typo in the instruction name or invalid declaration in line "+ str(i+1))
         exit()
 
@@ -211,11 +219,11 @@ def typeF(stmt):
 
 for i in range(len(stmts)):
     if('FLAGS' in stmts[i]):
-        if(len(i)!=3 or stmts[i][0]!='movr'):
+        if(len(stmts[i])!=3 or stmts[i][0]!='movr'):
             file_output.write("Error, Illegal use of FLAGS register in line "+str(i+1))
             exit()
         else:
-            typeC_checker(stmts[i])
+            typeC_checker(stmts[i],i)
     if(stmts[i][0] in ['add','sub','mul','xor','or','and']):
         typeA_checker(stmts[i], i)
     elif(stmts[i][0] in ['mov','ls','rs']):
