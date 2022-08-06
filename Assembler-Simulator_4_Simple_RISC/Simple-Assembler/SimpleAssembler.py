@@ -31,7 +31,6 @@ registers={
     "R6":"110",
     "FLAGS":"111"
 }
-
 from sys import stdout
 file_output=stdout
 
@@ -43,7 +42,7 @@ def DecimalToBinary(num):
 
 def register_checker(reg,i):
     if reg not in registers.keys():
-        file_output.write("Error, Use of Invalid Registers in line "+str(i+1))
+        file_output.write("Error, Use of Invalid Registers in line "+str(i))
         exit()
 
 def all_variable_definition_at_beginning(stmts):
@@ -51,61 +50,61 @@ def all_variable_definition_at_beginning(stmts):
         count=0
         if stmts[i][0]=="var":
             if count ==1:
-                file_output.write("Error, All the variable definitions are not made at the beginning of the assembly language, specifically "+stmts[i][0]+" in line "+str(i+1))
+                file_output.write("Error, All the variable definitions are not made at the beginning of the assembly language, specifically "+stmts[i][0]+" in line "+str(i))
                 exit()
         else:
             count=1
 
 def immediate_checker(imm, i):
     if "$"!=imm[0]:
-        file_output.write("Error, Immediate not provided, line "+str(i+1))
+        file_output.write("Error, Immediate not provided, line "+str(i))
         exit()
     try :
         x=int(imm[1:])
         if(x>=256 or x<0):
-            file_output.write("Error, The Immediate exceeds the limit from 0 to 255, line "+str(i+1))
+            file_output.write("Error, The Immediate exceeds the limit from 0 to 255, line "+str(i))
             exit()
     except ValueError:
-        file_output.write("Error, The immediate should be a whole number, line "+str(i+1))
+        file_output.write("Error, The immediate should be a whole number, line "+str(i))
         exit()
 
 def typeA_checker(stmt,i):
     if len(stmt) != 4:
-        file_output.write("Error, Invalid Number of Arguments for a Type-A Instruction in line "+str(i+1))
+        file_output.write("Error, Invalid Number of Arguments for a Type-A Instruction in line "+str(i))
         exit()
     register_checker(stmt[1],i)
     register_checker(stmt[2],i)
     register_checker(stmt[3],i)
 def typeB_checker(stmt,i):
     if len(stmt) != 3:
-        file_output.write("Error, Invalid Number of Arguments for Type-B Instruction in line "+str(i+1))
+        file_output.write("Error, Invalid Number of Arguments for Type-B Instruction in line "+str(i))
         exit()
     register_checker(stmt[1],i)
     immediate_checker(stmt[2],i)
 def typeC_checker(stmt,i):
     if len(stmt) != 3:
-        file_output.write("Error, Invalid Number of Arguments for Type-C Instruction in line "+str(i+1))
+        file_output.write("Error, Invalid Number of Arguments for Type-C Instruction in line "+str(i))
         exit()
     register_checker(stmt[1],i)
     register_checker(stmt[2],i)
 def typeD_checker(stmt,i):
     if len(stmt) != 3:
-        file_output.write("Error, Invalid Number of Arguments for Type-D Instruction in line "+str(i+1))
+        file_output.write("Error, Invalid Number of Arguments for Type-D Instruction in line "+str(i))
         exit()
 def typeE_checker(stmt,i):
     if len(stmt) != 2:
-        file_output.write("Error, Invalid Number of Arguments for Type-E Instruction in line "+str(i+1))
+        file_output.write("Error, Invalid Number of Arguments for Type-E Instruction in line "+str(i))
         exit()
 def typeF_checker(stmt,i):
     if len(stmt) != 1:
-        file_output.write("Error, Invalid Number of Arguments for Type-E Instruction in line "+str(i+1))
+        file_output.write("Error, Invalid Number of Arguments for Type-E Instruction in line "+str(i))
         exit()
 
 from sys import stdin
 stmts=[]
 for x in stdin:
     x=x.strip()
-    if x=="\n" or x==" "or x=="":
+    if x=="\n" or x==" " or x=="":
         continue
     lst=x.split()
     stmts.append(lst)
@@ -117,7 +116,7 @@ for i in range(len(stmts)):
             if("$" not in stmts[i][2]):
                 stmts[i][0]=stmts[i][0]+'r'
         except:
-            file_output.write("Error, Immediate not provided in line "+str(i+1))
+            file_output.write("Error, Immediate not provided in line "+str(i))
             exit()
 
 #Edit and storing the label names
@@ -126,12 +125,12 @@ pc=0
 for i in range(len(stmts)):
     if stmts[i][0][len(stmts[i][0])-1]==":":
         if len(stmts[i][0])==1:
-            file_output.write("Error, Invalid statement in line "+str(i+1))
+            file_output.write("Error, Invalid statement in line "+str(i))
             exit()
         labels_lst[stmts[i][0][:-1]]=pc #storing labels
         stmts[i].remove(stmts[i][0])
         if len(stmts[i])==0:
-            file_output.write("Error, Empty label in line "+str(i+1))
+            file_output.write("Error, Empty label in line "+str(i))
             exit()
     if stmts[i][0]!="var":
         pc+=1
@@ -147,7 +146,7 @@ if len(stmts)>256:
 #Typos in Instruction Name
 for i in range(len(stmts)):
     if stmts[i][0] not in opcode.keys() and stmts[i][0]!="var":
-        file_output.write("Error, Typo in the instruction name or invalid declaration in line "+ str(i+1))
+        file_output.write("Error, Typo in the instruction name or invalid declaration in line "+ str(i))
         exit()
 
 instructions={}
@@ -168,11 +167,11 @@ for i in range(len(stmts)):
 for i in range(len(stmts)) :
     if stmts[i][0] in ['ld','st']:
         if stmts[i][2] not in var_list:
-            file_output.write("Error, Use of an undefined variable in line "+str(i+1))
+            file_output.write("Error, Use of an undefined variable in line "+str(i))
             exit()
     if stmts[i][0] in ['jmp','jlt','jgt','je']:
         if stmts[i][1] not in labels_lst.keys():
-            file_output.write("Error, Use of an undefined label in line "+str(i+1))
+            file_output.write("Error, Use of an undefined label in line "+str(i))
             exit()
 
 #Checking if hlt instruction is present or not, if present, it should be the last
@@ -183,10 +182,10 @@ for i in range(len(stmts)):
             if(stmts[i][0]=='hlt' and len(stmts[i])==1):
                 is_hlt=True
             else:
-                file_output.write("Error, Illegal use of hlt instruction in line "+str(i+1))
+                file_output.write("Error, Illegal use of hlt instruction in line "+str(i))
                 exit()
         else:
-            file_output.write("Error, hlt must be the last instrucion in line "+str(i+1))
+            file_output.write("Error, hlt must be the last instrucion in line "+str(i))
             exit()
 if not(is_hlt):
     file_output.write("Error, missing hlt instruction")
@@ -217,8 +216,8 @@ def typeF(stmt):
 
 for i in range(len(stmts)):
     if('FLAGS' in stmts[i]):
-        if(len(stmts[i])!=3 or stmts[i][0]!='movr'):
-            file_output.write("Error, Illegal use of FLAGS register in line "+str(i+1))
+        if(len(stmts[i])!=3 or stmts[i][0]!='movr' or stmts[i][1]!='FLAGS'):
+            file_output.write("Error, Illegal use of FLAGS register in line "+str(i))
             exit()
         else:
             typeC_checker(stmts[i],i)
