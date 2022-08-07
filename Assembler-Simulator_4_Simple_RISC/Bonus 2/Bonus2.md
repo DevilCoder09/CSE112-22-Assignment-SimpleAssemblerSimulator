@@ -24,15 +24,15 @@ answer the following questions:
 >>> 0.5marks
 
 >#### Number of bits needed by opcode
->> 2 bits
+>> 6 bits
 >>> 0.25marks
 
 >#### Number of filler bits in Instruction type 2
->>8 bits
+>>4 bits
 >>> 0.25marks
 
 >#### Maximum numbers of instructions this ISA can support
->>4                                       
+>> 64                                     
 >>> 0.5marks
 
 >#### Maximum number of registers this ISA can support
