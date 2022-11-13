@@ -1,4 +1,3 @@
-"""Aryan Gupta-2021314 Tony Thomas-2021360 Harsh Bhardwaj-2021322"""
 registers={
     "000":0,
     "001":0,
